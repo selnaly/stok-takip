@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Tüm Stok Hareketleri</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .geri {
+            background: #222;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 7px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            background: white;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #222;
+            color: white;
+        }
+
+        .giris {
+            color: green;
+            font-weight: bold;
+        }
+
+        .cikis {
+            color: #b00020;
+            font-weight: bold;
+        }
+
+        .bos {
+            text-align: center;
+            padding: 35px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <h1>Tüm Stok Hareketleri</h1>
+
+        <a
+            href="{% url 'urun_listesi' %}"
+            class="geri"
+        >
+            ← Ana Sayfa
+        </a>
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+            <tr>
+                <th>Tarih</th>
+                <th>Ürün</th>
+                <th>İşlem</th>
+                <th>Miktar</th>
+                <th>Açıklama</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+
+            {% for movement in movements %}
+
+                <tr>
+
+                    <td>
+                        {{ movement.created_at|date:"d.m.Y H:i" }}
+                    </td>
+
+                    <td>
+                        {{ movement.product.name }}
+                    </td>
+
+                    <td>
+
+                        {% if movement.movement_type == 'GIRIS' %}
+
+                            <span class="giris">
+                                Stok Girişi
+                            </span>
+
+                        {% else %}
+
+                            <span class="cikis">
+                                Stok Çıkışı
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if movement.movement_type == 'GIRIS' %}
+                            +
+                        {% else %}
+                            -
+                        {% endif %}
+
+                        {{ movement.quantity }}
+                        {{ movement.product.get_unit_display }}
+
+                    </td>
+
+                    <td>
+                        {{ movement.description|default:"-" }}
+                    </td>
+
+                </tr>
+
+            {% empty %}
+
+                <tr>
+                    <td colspan="5" class="bos">
+                        Henüz stok hareketi bulunmuyor.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

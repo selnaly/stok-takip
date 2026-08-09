@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Stok Geçmişi</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td {
+            padding: 14px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #222;
+            color: white;
+        }
+
+        .giris {
+            color: green;
+            font-weight: bold;
+        }
+
+        .cikis {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>{{ product.name }} - Stok Geçmişi</h1>
+
+    <p>
+        Mevcut stok:
+        <strong>
+            {{ product.quantity }} {{ product.unit }}
+        </strong>
+    </p>
+
+    <table>
+
+        <thead>
+        <tr>
+            <th>Tarih</th>
+            <th>İşlem</th>
+            <th>Miktar</th>
+            <th>Açıklama</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        {% for movement in movements %}
+
+            <tr>
+
+                <td>
+                    {{ movement.created_at|date:"d.m.Y H:i" }}
+                </td>
+
+                <td>
+
+                    {% if movement.movement_type == 'GIRIS' %}
+
+                        <span class="giris">
+                            Stok Girişi
+                        </span>
+
+                    {% else %}
+
+                        <span class="cikis">
+                            Stok Çıkışı
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    {% if movement.movement_type == 'GIRIS' %}
+                        +
+                    {% else %}
+                        -
+                    {% endif %}
+
+                    {{ movement.quantity }}
+                    {{ product.unit }}
+
+                </td>
+
+                <td>
+                    {{ movement.description|default:"-" }}
+                </td>
+
+            </tr>
+
+        {% empty %}
+
+            <tr>
+                <td colspan="4">
+                    Henüz stok hareketi bulunmuyor.
+                </td>
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <br>
+
+    <a href="{% url 'urun_listesi' %}">
+        ← Stok listesine dön
+    </a>
+
+</div>
+
+</body>
+</html>

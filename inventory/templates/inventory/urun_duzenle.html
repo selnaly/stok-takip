@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ürün Düzenle</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fa;
+            padding: 30px;
+        }
+
+        .kutu {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: #222;
+            color: white;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="kutu">
+
+    <h1>Ürün Düzenle</h1>
+
+    <h3>{{ product.name }}</h3>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Değişiklikleri Kaydet
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="{% url 'urun_listesi' %}">
+        ← Stok listesine dön
+    </a>
+
+</div>
+
+</body>
+</html>
